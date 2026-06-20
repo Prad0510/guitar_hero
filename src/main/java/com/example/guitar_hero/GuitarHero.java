@@ -1,3 +1,8 @@
+package com.example.guitar_hero;
+
+import edu.princeton.cs.introcs.StdAudio;
+import edu.princeton.cs.introcs.StdDraw;
+
 public class GuitarHero {
     // Interactive client that simulates a 37-string guitar using the keyboard.2
     public static void main(String[] args) {

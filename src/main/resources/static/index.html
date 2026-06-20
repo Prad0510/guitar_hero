@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GUITAR HERO: ARCHADIA ⚡</title>
+    <style>
+        body {
+            background: radial-gradient(circle at center, #180736 0%, #04010a 100%);
+            color: #fff;
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Arcade Cabinet Housing */
+        .arcade-cabinet {
+            max-width: 950px;
+            margin: 15px auto;
+            background: linear-gradient(145deg, #150524 0%, #05010c 100%);
+            padding: 30px;
+            border-radius: 28px;
+            border: 4px solid #ff007f;
+            box-shadow: 0 0 35px rgba(255, 0, 127, 0.4),
+                        inset 0 0 25px rgba(0, 255, 255, 0.15);
+            position: relative;
+        }
+
+        h1.neon-title {
+            font-size: 3.5em;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #00ffff;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+        }
+
+        /* Level Selector Deck Dashboard */
+        .menu-container {
+            background: rgba(8, 3, 20, 0.85);
+            padding: 22px;
+            border-radius: 18px;
+            border: 2px solid #391463;
+            box-shadow: 0 0 15px rgba(189, 147, 249, 0.1);
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 1.1em;
+            color: #bd93f9;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(189, 147, 249, 0.5);
+        }
+        .btn-deck {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .mode-btn {
+            background: #140b24;
+            color: #bd93f9;
+            border: 2px solid #bd93f9;
+            padding: 12px 22px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+        }
+        .mode-btn:hover {
+            background: #2a124d;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(189, 147, 249, 0.6);
+            transform: translateY(-2px);
+        }
+        .mode-btn.active-mode {
+            background: linear-gradient(135deg, #ff007f 0%, #bd93f9 100%);
+            border-color: #fff;
+            box-shadow: 0 0 20px #ff007f, 0 0 35px rgba(255, 0, 127, 0.5);
+            color: #fff;
+        }
+        .level-badge {
+            display: block;
+            font-size: 0.75em;
+            color: #00ffff;
+            margin-top: 4px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Gameplay Deck */
+        .dashboard-deck {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 2, 10, 0.75);
+            padding: 15px 30px;
+            border-radius: 14px;
+            margin: 20px 0;
+            border-bottom: 3px solid #ff007f;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        .metric {
+            font-size: 1.6em;
+            color: #39ff14;
+            text-shadow: 0 0 12px #39ff14, 0 0 25px rgba(57, 255, 20, 0.4);
+        }
+        .rating-banner {
+            font-size: 1.6em;
+            font-weight: bold;
+            min-width: 280px;
+            text-shadow: 0 0 15px currentColor;
+            letter-spacing: 1px;
+        }
+        .metronome-box { display: flex; align-items: center; gap: 12px; }
+        .beat-cluster { display: flex; gap: 8px; }
+        .laser-dot {
+            width: 16px;
+            height: 16px;
+            background: #25163a;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 0, 127, 0.2);
+            transition: all 0.05s ease;
+        }
+        .laser-dot.pulse {
+            background: #39ff14;
+            box-shadow: 0 0 15px #39ff14, 0 0 30px #39ff14;
+            transform: scale(1.15);
+        }
+
+        /* Note Stream Tracker Card Design */
+        .stream-track {
+            background: #05020a;
+            padding: 18px;
+            border-radius: 14px;
+            border: 2px dashed #ff007f;
+            box-shadow: inset 0 0 15px rgba(255, 0, 127, 0.2);
+            margin: 25px 0;
+            min-height: 60px;
+        }
+        .node-flow { display: flex; justify-content: center; gap: 16px; align-items: center; }
+        .node {
+            min-width: 110px;
+            height: 55px;
+            line-height: 51px; /* Center aligned for the border */
+            border-radius: 10px;
+            font-size: 1em;
+            background: #140f24;
+            border: 2px solid #443763;
+            color: #8e8e93;
+            padding: 0 10px;
+            box-sizing: border-box;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+        }
+        .node.active-target {
+            background: #00ffff;
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 20px #00ffff, 0 0 35px rgba(0, 255, 255, 0.6);
+            transform: scale(1.12);
+        }
+
+        /* 3D PERSPECTIVE LASER FRETBOARD GRID */
+        .cyber-fretboard {
+            background: linear-gradient(180deg, rgba(20, 7, 40, 0.6) 0%, rgba(5, 2, 12, 0.95) 100%);
+            border-radius: 20px;
+            border: 3px solid #ff007f;
+            padding: 30px 0 20px 0;
+            margin: 30px 0;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.25),
+                        inset 0 0 30px rgba(0, 255, 255, 0.1);
+            position: relative;
+            /* Perspective makes it look like a real arcade road layout */
+            perspective: 400px;
+        }
+        .neon-lane {
+            height: 36px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        /* Fret lines running vertically across the strings */
+        .neon-lane::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 25%; right: 25%; bottom: 0;
+            border-left: 1px dashed rgba(255, 255, 255, 0.15);
+            border-right: 1px dashed rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+        }
+
+        .glow-wire {
+            height: 4px;
+            width: 100%;
+            transition: all 0.06s ease;
+        }
+
+        /* Vibrant Custom Neon Laser Assignments */
+        #lane-0 .glow-wire { background: #ff0055; box-shadow: 0 0 12px #ff0055, 0 0 20px rgba(255, 0, 85, 0.4); }
+        #lane-1 .glow-wire { background: #ffaa00; box-shadow: 0 0 12px #ffaa00, 0 0 20px rgba(255, 170, 0, 0.4); }
+        #lane-2 .glow-wire { background: #ffea00; box-shadow: 0 0 12px #ffea00, 0 0 20px rgba(255, 234, 0, 0.4); }
+        #lane-3 .glow-wire { background: #00ff66; box-shadow: 0 0 12px #00ff66, 0 0 20px rgba(0, 255, 102, 0.4); }
+        #lane-4 .glow-wire { background: #00ffff; box-shadow: 0 0 12px #00ffff, 0 0 20px rgba(0, 255, 255, 0.4); }
+        #lane-5 .glow-wire { background: #aa00ff; box-shadow: 0 0 12px #aa00ff, 0 0 20px rgba(170, 0, 255, 0.4); }
+
+        /* Flash Strum Impact hit state animation */
+        .neon-lane.hit .glow-wire {
+            height: 12px;
+            background: #ffffff !important;
+            box-shadow: 0 0 35px #fff, 0 0 60px currentColor, 0 0 90px currentColor !important;
+        }
+
+        /* Keycaps Layout Reference Map Deck */
+        .keycap-deck {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid #25163a;
+        }
+        .keycap {
+            background: linear-gradient(180deg, #22143d 0%, #120924 100%);
+            border: 2px solid #bd93f9;
+            border-radius: 12px;
+            padding: 10px 14px;
+            min-width: 75px;
+            box-shadow: 0 5px 0 #633e9c;
+            transition: all 0.05s ease;
+        }
+        .keycap.pressed {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #633e9c, 0 0 15px #00ffff;
+            border-color: #00ffff;
+            background: linear-gradient(180deg, #102a3d 0%, #061724 100%);
+        }
+        .keyboard-trigger {
+            font-size: 1.4em;
+            color: #fff;
+            display: block;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .musical-note-label {
+            font-size: 0.85em;
+            color: #ff007f;
+            display: block;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 700;
+            margin-top: 3px;
+            text-shadow: 0 0 5px rgba(255, 0, 127, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="arcade-cabinet">
+    <h1 class="neon-title">GUITAR AUDIO HERO</h1>
+
+    <div class="menu-container">
+        <div class="section-title">SELECT STAGE LEVEL ARCHITECTURE</div>
+        <div class="btn-deck">
+            <button id="btn-free" class="mode-btn active-mode" onclick="selectGameMode('free')">
+                FREE PLAY STRUM <span class="level-badge">Infinite Jam Mode</span>
+            </button>
+            <button id="btn-lvl1" class="mode-btn" onclick="selectGameMode('1')">
+                LEVEL 1 <span class="level-badge">Easy (Whole Notes)</span>
+            </button>
+            <button id="btn-lvl2" class="mode-btn" onclick="selectGameMode('2')">
+                LEVEL 2 <span class="level-badge">Medium Bass Line</span>
+            </button>
+            <button id="btn-lvl3" class="mode-btn" onclick="selectGameMode('3')">
+                LEVEL 3 <span class="level-badge">Classic Rock Anthem</span>
+            </button>
+            <button id="btn-lvl4" class="mode-btn" onclick="selectGameMode('4')">
+                LEVEL 4 <span class="level-badge">Advanced (Fast Pace)</span>
+            </button>
+            <button id="btn-lvl5" class="mode-btn" onclick="selectGameMode('5')">
+                LEVEL 5 <span class="level-badge">Expert Shredder Matrix</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="dashboard-deck">
+        <div>SCORE: <span id="game-score" class="metric">0000</span></div>
+        <div id="hit-rating" class="rating-banner" style="color: #00ffff;">READY TO JAM</div>
+        <div class="metronome-box">
+            <div id="time-signature-lbl" style="color:#bd93f9; border: 1px solid #bd93f9; padding: 3px 8px; font-size: 0.9em;">JAM 4/4</div>
+            <div class="beat-cluster" id="beat-dots-container">
+                <div class="laser-dot" id="dot-1"></div>
+                <div class="laser-dot" id="dot-2"></div>
+                <div class="laser-dot" id="dot-3"></div>
+                <div class="laser-dot" id="dot-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stream-track" id="stream-panel">
+        <div class="node-flow" id="sequence-track"></div>
+    </div>
+
+    <div class="cyber-fretboard">
+        <div class="neon-lane" id="lane-0"><div class="glow-wire"></div></div>
+        <div class="neon-lane" id="lane-1"><div class="glow-wire"></div></div>
+        <div class="neon-lane" id="lane-2"><div class="glow-wire"></div></div>
+        <div class="neon-lane" id="lane-3"><div class="glow-wire"></div></div>
+        <div class="neon-lane" id="lane-4"><div class="glow-wire"></div></div>
+        <div class="neon-lane" id="lane-5"><div class="glow-wire"></div></div>
+    </div>
+
+    <div class="keycap-deck">
+        <div class="keycap" id="cap-q"><span class="keyboard-trigger">Q</span><span class="musical-note-label">Root (A)</span></div>
+        <div class="keycap" id="cap-e"><span class="keyboard-trigger">E</span><span class="musical-note-label">Min3 (C)</span></div>
+        <div class="keycap" id="cap-r"><span class="keyboard-trigger">R</span><span class="musical-note-label">Perf4 (D)</span></div>
+        <div class="keycap" id="cap-t"><span class="keyboard-trigger">T</span><span class="musical-note-label">Dim5 (D#)</span></div>
+        <div class="keycap" id="cap-y"><span class="keyboard-trigger">Y</span><span class="musical-note-label">Perf5 (E)</span></div>
+    </div>
+
+    <div id="backend-status" style="font-size: 11px; color: #44475a; font-family: monospace; margin-top: 15px;">Spring Boot Data Link Online.</div>
+</div>
+
+<script>
+    var KEYBOARD_MAP = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
+    var scoreBox = document.getElementById("game-score");
+    var ratingBox = document.getElementById("hit-rating");
+    var trackContainer = document.getElementById("sequence-track");
+    var statusBox = document.getElementById("backend-status");
+    var timeLbl = document.getElementById("time-signature-lbl");
+
+    var score = 0;
+    var currentStep = 0;
+    var currentBeat = 1;
+    var lastBeatTime = 0;
+    var beatDurationMs = 500;
+    var metronomeInterval = null;
+    var activeMode = 'free'; // Default start profile state
+
+    // 5 Tiers Difficulty Track Matrix Array Maps
+// Overwrite your existing LEVEL_DATABASE block with this explicitly labeled edition
+var LEVEL_DATABASE = {
+    '1': {
+        timeSig: 4, tempo: 600, label: "SIMPLE WHOLE NOTES",
+        notes: [
+            {key:'q', label:'A₄ (Q)'}, {key:'y', label:'E₅ (Y)'},
+            {key:'q', label:'A₄ (Q)'}, {key:'y', label:'E₅ (Y)'}
+        ]
+    },
+    '2': {
+        timeSig: 4, tempo: 500, label: "SEVEN NATION BASS LINE",
+        notes: [
+            {key:'r', label:'E₄ (R)'}, {key:'r', label:'E₄ (R)'}, {key:'y', label:'G₄ (Y)'},
+            {key:'r', label:'E₄ (R)'}, {key:'e', label:'D₄ (E)'}, {key:'q', label:'C₄ (Q)'}
+        ]
+    },
+    '3': {
+        timeSig: 4, tempo: 450, label: "SMOKE ROCK ANTHEM",
+        notes: [
+            {key:'q', label:'A₃ (Q)'}, {key:'e', label:'C₄ (E)'}, {key:'r', label:'D₄ (R)'},
+            {key:'q', label:'A₃ (Q)'}, {key:'e', label:'C₄ (E)'}, {key:'t', label:'D#₄ (T)'}, {key:'r', label:'D₄ (R)'}
+        ]
+    },
+    '4': {
+        timeSig: 3, tempo: 380, label: "FÜR ELISE WALTZ SHRED",
+        notes: [
+            {key:'y', label:'E₅ (Y)'}, {key:'t', label:'D#₅ (T)'}, {key:'y', label:'E₅ (Y)'},
+            {key:'t', label:'D#₅ (T)'}, {key:'y', label:'E₅ (Y)'}, {key:'r', label:'B₄ (R)'}
+        ]
+    },
+    '5': {
+        timeSig: 4, tempo: 280, label: "MASTER METAL SPEED MATRIX",
+        notes: [
+            {key:'q', label:'A₄'}, {key:'r', label:'D₅'}, {key:'e', label:'C₅'},
+            {key:'y', label:'E₅'}, {key:'t', label:'D#₅'}, {key:'q', label:'A₄'}
+        ]
+    }
+};
+
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    var audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function selectGameMode(modeKey) {
+        initAudio();
+        activeMode = modeKey;
+        currentStep = 0;
+        currentBeat = 1;
+
+        // Toggle active layout design buttons visual deck state
+        document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active-mode'));
+        if(modeKey === 'free') document.getElementById("btn-free").classList.add("active-mode");
+        else document.getElementById("btn-lvl" + modeKey).classList.add("active-mode");
+
+        if (modeKey === 'free') {
+            ratingBox.innerText = "FREE JAM PLAY ACTIVE";
+            ratingBox.style.color = "#bd93f9";
+            timeLbl.innerText = "JAM 4/4";
+            trackContainer.innerHTML = "<div style='color:#6272a4; font-family:sans-serif;'>Strum keys freely! No target rules active.</div>";
+            setupMetronomeDots(4);
+            startClock(500, 4);
+        } else {
+            var lvl = LEVEL_DATABASE[modeKey];
+            ratingBox.innerText = lvl.label;
+            ratingBox.style.color = "#00ffff";
+            timeLbl.innerText = "ROCK " + lvl.timeSig + "/4";
+            setupMetronomeDots(lvl.timeSig);
+            renderTrack();
+            startClock(lvl.tempo, lvl.timeSig);
+        }
+    }
+
+    function setupMetronomeDots(beatsCount) {
+        var container = document.getElementById("beat-dots-container");
+        container.innerHTML = "";
+        for(var i=1; i<=beatsCount; i++) {
+            var dot = document.createElement("div");
+            dot.className = "laser-dot";
+            dot.id = "dot-" + i;
+            container.appendChild(dot);
+        }
+    }
+
+    function startClock(duration, maxBeats) {
+        if(metronomeInterval) clearInterval(metronomeInterval);
+        metronomeInterval = setInterval(function() {
+            for(var i=1; i<=maxBeats; i++) {
+                var el = document.getElementById("dot-"+i);
+                if(el) el.classList.remove("pulse");
+            }
+            var currentActiveDot = document.getElementById("dot-" + currentBeat);
+            if(currentActiveDot) currentActiveDot.classList.add("pulse");
+
+            lastBeatTime = Date.now();
+            currentBeat = (currentBeat % maxBeats) + 1;
+        }, duration);
+    }
+
+    function renderTrack() {
+        if (activeMode === 'free') return;
+        trackContainer.innerHTML = "";
+        var currentSongNotes = LEVEL_DATABASE[activeMode].notes;
+        for (var i = 0; i < 4; i++) {
+            var index = (currentStep + i) % currentSongNotes.length;
+            var nodeElement = document.createElement("div");
+            nodeElement.className = "node " + (i === 0 ? "active-target" : "");
+            nodeElement.innerText = currentSongNotes[index].label;
+            trackContainer.appendChild(nodeElement);
+        }
+    }
+
+    window.addEventListener("keydown", function(event) {
+        var pressedKey = event.key.toLowerCase();
+        var index = KEYBOARD_MAP.indexOf(pressedKey);
+
+        if (index !== -1) {
+            initAudio();
+
+            var targetCap = document.getElementById("cap-" + pressedKey);
+            if (targetCap) {
+                targetCap.classList.add("pressed");
+                setTimeout(function() { targetCap.classList.remove("pressed"); }, 100);
+            }
+
+            if (activeMode !== 'free') {
+                var lvl = LEVEL_DATABASE[activeMode];
+                if (pressedKey === lvl.notes[currentStep].key) {
+                    var elapsed = Date.now() - lastBeatTime;
+                    if (elapsed < 140 || (lvl.tempo - elapsed) < 140) {
+                        score += 200;
+                        ratingBox.innerText = "⚡ PERFECT RHYTHM ⚡";
+                        ratingBox.style.color = "#39ff14";
+                    } else {
+                        score += 70;
+                        ratingBox.innerText = "HIT MATCH";
+                        ratingBox.style.color = "#ffaa00";
+                    }
+                    currentStep = (currentStep + 1) % lvl.notes.length;
+                    renderTrack();
+                } else {
+                    ratingBox.innerText = "MISS STRUM BREAK";
+                    ratingBox.style.color = "#ff0055";
+                }
+                scoreBox.innerText = String(score).padStart(4, '0');
+            }
+
+            var laneTarget = index % 6;
+            var laneElement = document.getElementById("lane-" + laneTarget);
+            if (laneElement) {
+                laneElement.classList.add("hit");
+                setTimeout(function() { laneElement.classList.remove("hit"); }, 80);
+            }
+
+            sendKeyToBackend(pressedKey);
+            playOverdrivenGuitarNote(index);
+        }
+    });
+
+    function sendKeyToBackend(key) {
+        fetch("http://localhost:8080/pluck?key=" + key)
+            .then(function(r) { return r.text(); })
+            .then(function(t) { statusBox.innerText = t; });
+    }
+
+    function playOverdrivenGuitarNote(stringIndex) {
+        if (!audioCtx) return;
+        var frequency = 220 * Math.pow(2, (stringIndex - 24) / 12);
+
+        var oscillator = audioCtx.createOscillator();
+        var gainNode = audioCtx.createGain();
+        var distortion = audioCtx.createWaveShaper();
+
+        function makeDistortionCurve(amount) {
+            var k = 50, n_samples = 44100, curve = new Float32Array(n_samples), i = 0, x;
+            for ( ; i < n_samples; ++i ) {
+                x = (i * 2) / n_samples - 1;
+                curve[i] = (3 + k) * x * 20 * (Math.PI / 180) / (Math.PI + k * Math.abs(x));
+            }
+            return curve;
+        };
+        distortion.curve = makeDistortionCurve(120);
+        distortion.oversample = '4x';
+
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = "peaking";
+        filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+        filter.Q.setValueAtTime(4, audioCtx.currentTime);
+
+        oscillator.type = "sawtooth";
+        oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+        gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
+
+        oscillator.connect(distortion);
+        distortion.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.8);
+    }
+
+    // Kickstart the default Infinite Free Play Jam mode profile on initialization setup
+    selectGameMode('free');
+</script>
+</body>
+</html>

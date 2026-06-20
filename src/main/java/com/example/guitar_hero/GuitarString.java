@@ -1,3 +1,7 @@
+package com.example.guitar_hero;
+
+import edu.princeton.cs.introcs.StdRandom;
+
 public class GuitarString {
     private static final int SAMPLE_RATE = 44100;    // Standard sampling rate in Hz
     // Models energy dissipation over a round trip
@@ -37,7 +41,7 @@ public class GuitarString {
         int n = buffer.capacity();
         for (int i = 0; i < n; i++) {
             buffer.dequeue();
-            double noise = StdRandom.uniformDouble(-0.5,
+            double noise = StdRandom.uniform(-0.5,
                                                    0.5);
             buffer.enqueue(noise);
         }

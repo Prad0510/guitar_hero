@@ -1,3 +1,5 @@
+package com.example.guitar_hero;
+
 public class RingBuffer {
     private int capacity;   // Maximum number of samples the string can hold
     private double[] buffer;    // Array to store the displacement samples
